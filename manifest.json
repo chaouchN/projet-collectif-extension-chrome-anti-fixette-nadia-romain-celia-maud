@@ -9,6 +9,7 @@
             "48": "images/icon16.png",
             "128": "images/icon16.png"    
     },
+    "permissions": ["activeTab"],
     "action": {
         "default_title": "Click Me",
         "default_popup": "index.html"  
@@ -17,10 +18,22 @@
     "content_scripts": [
         {
             "js": ["script.js"],
+            "type" : "module",
             "matches": [
-                "https://developer.chrome.com/docs/extensions/*",
-                "https://developer.chrome.com/docs/webstore/*",
-                "https://www.youtube.com/*"
+                "https://www.google.com/*",
+                "https://www.youtube.com/*",
+                "https://www.facebook.com/*",
+                "https://www.instagram.com/*",
+                "https://twitter.com/*",
+                "https://fr.wikipedia.org/*",
+                "https://fr.yahoo.com/*",
+                "https://web.whatsapp.com/*",
+                "https://www.xvideos.com/*",
+                "https://www.tiktok.com/*",
+                "https://www.amazon.com/*",
+                "https://www.amazon.fr/*",
+                "https://www.reddit.com/*",
+                "https://www.pornhub.com/*"
             ]
         }
     ]
