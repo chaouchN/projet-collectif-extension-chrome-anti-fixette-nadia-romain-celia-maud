@@ -1,3 +1,5 @@
+const debug = document.getElementById("debug");
+
 const bazar = [
   "https://wikiroulette.co/",
   "https://thesecatsdonotexist.com/",
@@ -17,10 +19,9 @@ const midi = [
 ];
 
 const hourDay = new Date().getHours();
-const debug = document.getElementById("debug");
+const intervalID = setInterval(popUp, 100000, bazar.length);
 
 //appelle la fonction popup toute les X millis avec comme paramètre 4
-const intervalID = setInterval(popUp, 5000, bazar.length);
 //alerte qui affiche le paramètre randomisé par la multiplication puis transformé en entier par math.floor
 function popUp(a) {
   if (hourDay >= 12 && hourDay <= 14) {
@@ -43,3 +44,15 @@ function popUp(a) {
 
 // tableauDataPromise.then((data) => {
 // });
+
+// document.querySelector('button').addEventListener('click', onOff, false);
+// function onOff(){
+//   let currentvalue = document.getElementById('onoff').value;
+//   if(currentvalue == "Off"){
+//     document.getElementById("onoff").value="On";
+//   }else{
+//     document.getElementById("onoff").value="Off";
+//   }
+//   alert("testOnOff");
+//   debug.innerHTML="testOnOff";
+// }
