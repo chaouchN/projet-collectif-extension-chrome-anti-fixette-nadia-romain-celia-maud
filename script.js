@@ -31,6 +31,39 @@ function popUp(a) {
   }
 }
 
+function ouvrirURL() {
+  // Récupérer le nom de domaine actuel
+  let domaine = window.location.hostname;
+
+  const domainesUrls = {
+    "www.youtube.com": "https://thesecatsdonotexist.com/",
+    "www.amazon.com": "https://www.leboncoin.fr/",
+    "www.amazon.fr": "https://www.leboncoin.fr/",
+    "www.google.com":"https://wikiroulette.co/",
+    "www.facebook.com":"https://theuselessweb.com/",
+    "www.instagram.com":"https://www.kamoulox.lol/",
+    "twitter.com":"https://fr.wikihow.com/faire-une-pause-avec-les-r%C3%A9seaux-sociaux",
+    "wikipedia.org":"https://fr.wikihow.com/surmonter-la-cyberd%C3%A9pendance",
+    "yahoo.com":"https://lasonotheque.org/jeux/quiz-sonore",
+    "web.whatsapp.com":"http://make-everything-ok.com/",
+    "www.xvideos.com":"https://www.youtube.com/watch?v=4_1sKQP3Uo4/",
+    "tiktok.com":"https://pointerpointer.com/",
+    "www.pornhub.com":"https://www.youtube.com/watch?v=4_1sKQP3Uo4/",
+    // Ajoutez d'autres correspondances au besoin
+  };
+
+   // Vérifier si le domaine actuel a une correspondance dans la liste
+   if (domaine in domainesUrls) {
+    // Ouvrir l'URL correspondante pour le domaine actuel
+    window.location.href = domainesUrls[domaine];
+  } else {
+    // Si aucun domaine correspondant n'est trouvé, ouvrir une URL générique
+    window.open(bazar[Math.floor(Math.random() * bazar.length)]);
+  }
+}
+// Appeler la fonction pour l'exécuter
+ouvrirURL();
+
 // function fetchTableau() {
 //   return fetch("tableau.json")
 //     .then((response) => response.json())
