@@ -18,8 +18,30 @@ const midi = [
   "https://www.sports.gouv.fr/les-bienfaits-du-sport-25",
 ];
 
+
+window.onload = (event) => {
+// Ajouter un écouteur d'événements sur un clic lorsque l'utilisateur entre son URL
+// À ce moment-là, nous ajoutons l'URL à "bazar" et le sauvegardons dans le stockage local
+document.getElementById('addUrlButton').addEventListener('click', async () => {
+  const newUrl = document.getElementById('urlInput').value.trim();
+
+  // Vérifier si l'URL n'est pas vide
+  if (newUrl !== '') {
+    // Ajouter l'URL à "bazar"
+    bazar.push(newUrl);
+    console.log("newUrl is pushed in bazar script.js")
+
+    // Sauvegarder "bazar" dans le stockage local
+    await chrome.storage.local.set({ 'recupurl': bazar });
+  }
+});
+
+};
+
+console.log(bazar)
+
 const hourDay = new Date().getHours();
-const intervalID = setInterval(popUp, 100000, bazar.length);
+const intervalID = setInterval(popUp, 500000, bazar.length);
 
 //appelle la fonction popup toute les X millis avec comme paramètre 4
 //alerte qui affiche le paramètre randomisé par la multiplication puis transformé en entier par math.floor
@@ -29,7 +51,7 @@ function popUp(a) {
   } else {
     window.open(bazar[Math.floor(Math.random() * a)]);
   }
-}
+} 
 
 function ouvrirURL() {
   // Récupérer le nom de domaine actuel
@@ -46,9 +68,9 @@ function ouvrirURL() {
     "wikipedia.org":"https://fr.wikihow.com/surmonter-la-cyberd%C3%A9pendance",
     "yahoo.com":"https://lasonotheque.org/jeux/quiz-sonore",
     "web.whatsapp.com":"http://make-everything-ok.com/",
-    "www.xvideos.com":"https://www.youtube.com/watch?v=4_1sKQP3Uo4/",
+    "www.xvideos.com":"https://fr.wikihow.com/nettoyer-un-%C3%A9cran-d%E2%80%99ordinateur",
     "tiktok.com":"https://pointerpointer.com/",
-    "www.pornhub.com":"https://www.youtube.com/watch?v=4_1sKQP3Uo4/",
+    "www.pornhub.com":"https://fr.wikihow.com/nettoyer-un-%C3%A9cran-d%E2%80%99ordinateur",
     // Ajoutez d'autres correspondances au besoin
   };
 
@@ -62,7 +84,7 @@ function ouvrirURL() {
   }
 }
 // Appeler la fonction pour l'exécuter
-ouvrirURL();
+//ouvrirURL();
 
 // function fetchTableau() {
 //   return fetch("tableau.json")
