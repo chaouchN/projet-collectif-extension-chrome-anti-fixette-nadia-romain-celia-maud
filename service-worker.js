@@ -9,17 +9,18 @@ chrome.runtime.onInstalled.addListener(async () => {
     if (message.type === 'update-bazar') {
         const customLink = message.newUrl; // Utilisez message.bazar au lieu de message.newURL
         const chromeStorage = {};
-        chromeStorage["newBazar"] = JSON.stringify([customLink]);
+        // chromeStorage["newBazar"] = JSON.stringify([customLink]);
         
         let newBazarContent = await chrome.storage.local.get('newBazar');
         console.log("newBazarContent = ", newBazarContent)
-        if(!newBazarContent){
-          console.log("newBazar est vide")
-        } else {
-          console.log("newBazar n'est pas vide")
-        }
+        
+        if(!newBazarContent){newBazarContent = {};} 
+        if(!newBazarContent['newBazar']){newBazarContent['newBazar'] = []}
+        newBazarContent['newBazar'].push(customLink)
+        // newBazarContent['newBazar'] = [customLink];
+        console.log(newBazarContent)
 
-        chrome.storage.local.set(chromeStorage, () => {
+        chrome.storage.local.set(newBazarContent, () => {
             if (chrome.runtime.lastError) {
                 console.error("Error in setting data: ", chrome.runtime.lastError);
             } else {
