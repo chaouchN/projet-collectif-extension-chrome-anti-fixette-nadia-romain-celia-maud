@@ -1,5 +1,3 @@
-// const { log } = require("console");
-
 const bazar = [
   "https://wikiroulette.co/",
   "https://thesecatsdonotexist.com/",
@@ -19,39 +17,9 @@ const midi = [
 ];
 
 window.onload = (event) => {
-
-//envoyer au servic worker
-  chrome.runtime.sendMessage({ type: "append-log", text: "ping" }),
-  //recevoir du service worker
-  chrome.runtime.onMessage.addListener((message) => {
-    if (message.type === "append-log") {
-      console.log(message);
-    }
-  });
-
-  // Ajouter un écouteur d'événements sur un clic lorsque l'utilisateur entre son URL
-  // À ce moment-là, nous ajoutons l'URL à "bazar" et le sauvegardons dans le stockage local
-  document
-    .getElementById("addUrlButton")
-    .addEventListener("click", async () => {
-      const newUrl = document.getElementById("urlInput").value.trim();
-      const newKey = document.getElementById("urlInput").value.trim();
-      // Vérifier si l'URL n'est pas vide
-      if (newUrl !== "") {
-        // Ajouter l'URL à "bazar"
-        bazar.push(newUrl);
-        console.log("newUrl is pushed in bazar script.js");
-
-        // ou si vous souhaitez envoyer uniquement la nouvelle URL ajoutée :
-        chrome.runtime.sendMessage({ type: "update-bazar", newUrl: newUrl });
-
-        const linksArray = document.createElement("p");
-        linksArray.innerHTML = newUrl;
-        document.body.appendChild(linksArray);
-      }
-    });
+  catchCustomUrls();
+  addCustomUrls();
 };
-
 
 for (let i = 0; i < bazar.length; i++) {
   const linksArray = document.createElement("p");
@@ -106,31 +74,50 @@ function ouvrirURL() {
   }
 }
 
-// Appeler la fonction pour l'exécuter
-//ouvrirURL();
 
-// function fetchTableau() {
-//   return fetch("tableau.json")
-//     .then((response) => response.json())
-//     .catch((error) => {
-//       console.error("Erreur lors de la récupération du fichier JSON :", error);
-//     });
-// }
+function catchCustomUrls(){
+  //recevoir du service worker
+  chrome.runtime.onMessage.addListener((message) => {
+    if (message.type === "newBazarUpdate") {
+      const newBazar = message.newBazar;
+      console.log("newBazar attrapé dans le script.js", newBazar);
+      for (let i = 0; i < newBazar.length; i++) {
+        const linksArray = document.createElement("p");
+        linksArray.innerHTML = newBazar[i];
+        document.body.appendChild(linksArray);
+      }
+    }
+  });
+  
+  //triche pour attraper les url custom
+  document
+    .getElementById("activeCustomUrl")
+    .addEventListener("click", async () => {
+      chrome.runtime.sendMessage({ type: "update-bazar", content: "plop" });
+    });
+}
 
-// let tableauDataPromise = fetchTableau();
-// console.log(tableauDataPromise);
 
-// tableauDataPromise.then((data) => {
-// });
-
-// document.querySelector('button').addEventListener('click', onOff, false);
-// function onOff(){
-//   let currentvalue = document.getElementById('onoff').value;
-//   if(currentvalue == "Off"){
-//     document.getElementById("onoff").value="On";
-//   }else{
-//     document.getElementById("onoff").value="Off";
-//   }
-//   alert("testOnOff");
-//   debug.innerHTML="testOnOff";
-// }
+function addCustomUrls(){
+  // Ajouter un écouteur d'événements sur un clic lorsque l'utilisateur entre son URL
+  // À ce moment-là, nous ajoutons l'URL à "bazar" et le sauvegardons dans le stockage local
+  document
+  .getElementById("addUrlButton")
+  .addEventListener("click", async () => {
+    const newUrl = document.getElementById("urlInput").value.trim();
+    const newKey = document.getElementById("urlInput").value.trim();
+    // Vérifier si l'URL n'est pas vide
+    if (newUrl !== "") {
+      // Ajouter l'URL à "bazar"
+      bazar.push(newUrl);
+      console.log("newUrl is pushed in bazar script.js");
+      
+      // ou si vous souhaitez envoyer uniquement la nouvelle URL ajoutée :
+      chrome.runtime.sendMessage({ type: "update-bazar", newUrl: newUrl });
+      
+      const linksArray = document.createElement("p");
+      linksArray.innerHTML = newUrl;
+      document.body.appendChild(linksArray);
+    }
+  });
+}
