@@ -1,7 +1,5 @@
-const debug = document.getElementById("debug");
-
 const bazar = [
-  "https://wikiroulette.co/",
+  "https://wikiroulette.com/",
   "https://thesecatsdonotexist.com/",
   "https://theuselessweb.com/",
   "https://www.kamoulox.lol/",
@@ -18,96 +16,40 @@ const midi = [
   "https://www.sports.gouv.fr/les-bienfaits-du-sport-25",
 ];
 
-
-window.onload = (event) => {
-// Ajouter un écouteur d'événements sur un clic lorsque l'utilisateur entre son URL
-// À ce moment-là, nous ajoutons l'URL à "bazar" et le sauvegardons dans le stockage local
-document.getElementById('addUrlButton').addEventListener('click', async () => {
-  const newUrl = document.getElementById('urlInput').value.trim();
-
-  // Vérifier si l'URL n'est pas vide
-  if (newUrl !== '') {
-    // Ajouter l'URL à "bazar"
-    bazar.push(newUrl);
-    console.log("newUrl is pushed in bazar script.js")
-
-    // Sauvegarder "bazar" dans le stockage local
-    await chrome.storage.local.set({ 'recupurl': bazar });
-  }
-});
-
+const domainesUrls = {
+  "www.youtube.com": "https://thesecatsdonotexist.com/",
+  "www.amazon.com": "https://www.vinted.com/",
+  "www.amazon.fr": "https://www.leboncoin.fr/",
+  "www.google.com":"https://wikiroulette.co/",
+  "www.facebook.com":"https://theuselessweb.com/",
+  "www.instagram.com":"https://www.kamoulox.lol/",
+  "twitter.com":"https://fr.wikihow.com/faire-une-pause-avec-les-r%C3%A9seaux-sociaux",
+  "www.wikipedia.org":"https://fr.wikihow.com/surmonter-la-cyberd%C3%A9pendance",
+  "www.yahoo.com":"https://lasonotheque.org/jeux/quiz-sonore",
+  "web.whatsapp.com":"http://make-everything-ok.com/",
+  "www.xvideos.com":"https://fr.wikihow.com/nettoyer-un-%C3%A9cran-d%E2%80%99ordinateur",
+  "www.tiktok.com":"https://pointerpointer.com/",
+  "fr.pornhub.com":"https://fr.wikihow.com/nettoyer-un-%C3%A9cran-d%E2%80%99ordinateur",
+  // Ajoutez d'autres correspondances au besoin
 };
 
-console.log(bazar)
-
 const hourDay = new Date().getHours();
-const intervalID = setInterval(popUp, 500000, bazar.length);
+const intervalID = setInterval(popUp, 5000, bazar.length);
+ // Récupérer le nom de domaine actuel 
+
 
 //appelle la fonction popup toute les X millis avec comme paramètre 4
 //alerte qui affiche le paramètre randomisé par la multiplication puis transformé en entier par math.floor
 function popUp(a) {
+let domaine = window.location.hostname;
   if (hourDay >= 12 && hourDay <= 14) {
     window.open(midi[Math.floor(Math.random() * midi.length)]);
-  } else {
-    window.open(bazar[Math.floor(Math.random() * a)]);
-  }
-} 
-
-function ouvrirURL() {
-  // Récupérer le nom de domaine actuel
-  let domaine = window.location.hostname;
-
-  const domainesUrls = {
-    "www.youtube.com": "https://thesecatsdonotexist.com/",
-    "www.amazon.com": "https://www.leboncoin.fr/",
-    "www.amazon.fr": "https://www.leboncoin.fr/",
-    "www.google.com":"https://wikiroulette.co/",
-    "www.facebook.com":"https://theuselessweb.com/",
-    "www.instagram.com":"https://www.kamoulox.lol/",
-    "twitter.com":"https://fr.wikihow.com/faire-une-pause-avec-les-r%C3%A9seaux-sociaux",
-    "wikipedia.org":"https://fr.wikihow.com/surmonter-la-cyberd%C3%A9pendance",
-    "yahoo.com":"https://lasonotheque.org/jeux/quiz-sonore",
-    "web.whatsapp.com":"http://make-everything-ok.com/",
-    "www.xvideos.com":"https://fr.wikihow.com/nettoyer-un-%C3%A9cran-d%E2%80%99ordinateur",
-    "tiktok.com":"https://pointerpointer.com/",
-    "www.pornhub.com":"https://fr.wikihow.com/nettoyer-un-%C3%A9cran-d%E2%80%99ordinateur",
-    // Ajoutez d'autres correspondances au besoin
-  };
-
-   // Vérifier si le domaine actuel a une correspondance dans la liste
-   if (domaine in domainesUrls) {
-    // Ouvrir l'URL correspondante pour le domaine actuel
-    window.location.href = domainesUrls[domaine];
-  } else {
-    // Si aucun domaine correspondant n'est trouvé, ouvrir une URL générique
-    window.open(bazar[Math.floor(Math.random() * bazar.length)]);
-  }
+  } else // Vérifier si le domaine actuel a une correspondance dans la liste
+  if (domaine in domainesUrls) {
+   // Ouvrir l'URL correspondante pour le domaine actuel
+   window.location.href = domainesUrls[domaine];
+ } else {
+   // Si aucun domaine correspondant n'est trouvé, ouvrir une URL générique
+   window.open(bazar[Math.floor(Math.random() * a)]);
+ }
 }
-// Appeler la fonction pour l'exécuter
-//ouvrirURL();
-
-// function fetchTableau() {
-//   return fetch("tableau.json")
-//     .then((response) => response.json())
-//     .catch((error) => {
-//       console.error("Erreur lors de la récupération du fichier JSON :", error);
-//     });
-// }
-
-// let tableauDataPromise = fetchTableau();
-// console.log(tableauDataPromise);
-
-// tableauDataPromise.then((data) => {
-// });
-
-// document.querySelector('button').addEventListener('click', onOff, false);
-// function onOff(){
-//   let currentvalue = document.getElementById('onoff').value;
-//   if(currentvalue == "Off"){
-//     document.getElementById("onoff").value="On";
-//   }else{
-//     document.getElementById("onoff").value="Off";
-//   }
-//   alert("testOnOff");
-//   debug.innerHTML="testOnOff";
-// }
