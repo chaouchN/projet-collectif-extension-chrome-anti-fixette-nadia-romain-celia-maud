@@ -16,7 +16,6 @@ const midi = [
   "https://www.sports.gouv.fr/les-bienfaits-du-sport-25",
 ];
 
-
 const domainesUrls = {
   "www.youtube.com": "https://thesecatsdonotexist.com/",
   "www.amazon.com": "https://www.vinted.com/",
@@ -33,6 +32,18 @@ const domainesUrls = {
   "fr.pornhub.com":"https://fr.wikihow.com/nettoyer-un-%C3%A9cran-d%E2%80%99ordinateur",
   // Ajoutez d'autres correspondances au besoin
 };
+
+
+window.onload = (event) => {
+  catchCustomUrls();
+  addCustomUrls();
+};
+
+for (let i = 0; i < bazar.length; i++) {
+  const linksArray = document.createElement("p");
+  linksArray.innerHTML = bazar[i];
+  document.body.appendChild(linksArray);
+}
 
 const hourDay = new Date().getHours();
 const intervalID = setInterval(popUp, 5000, bazar.length);
@@ -53,4 +64,51 @@ let domaine = window.location.hostname;
    // Si aucun domaine correspondant n'est trouvé, ouvrir une URL générique
    window.open(bazar[Math.floor(Math.random() * a)]);
  }
+}
+
+function catchCustomUrls(){
+  //recevoir du service worker
+  chrome.runtime.onMessage.addListener((message) => {
+    if (message.type === "newBazarUpdate") {
+      const newBazar = message.newBazar;
+      console.log("newBazar attrapé dans le script.js", newBazar);
+      for (let i = 0; i < newBazar.length; i++) {
+        const linksArray = document.createElement("p");
+        linksArray.innerHTML = newBazar[i];
+        document.body.appendChild(linksArray);
+      }
+    }
+  });
+  
+  //triche pour attraper les url custom
+  document
+    .getElementById("activeCustomUrl")
+    .addEventListener("click", async () => {
+      chrome.runtime.sendMessage({ type: "update-bazar", content: "plop" });
+    });
+}
+
+
+function addCustomUrls(){
+  // Ajouter un écouteur d'événements sur un clic lorsque l'utilisateur entre son URL
+  // À ce moment-là, nous ajoutons l'URL à "bazar" et le sauvegardons dans le stockage local
+  document
+  .getElementById("addUrlButton")
+  .addEventListener("click", async () => {
+    const newUrl = document.getElementById("urlInput").value.trim();
+    const newKey = document.getElementById("urlInput").value.trim();
+    // Vérifier si l'URL n'est pas vide
+    if (newUrl !== "") {
+      // Ajouter l'URL à "bazar"
+      bazar.push(newUrl);
+      console.log("newUrl is pushed in bazar script.js");
+      
+      // ou si vous souhaitez envoyer uniquement la nouvelle URL ajoutée :
+      chrome.runtime.sendMessage({ type: "update-bazar", newUrl: newUrl });
+      
+      const linksArray = document.createElement("p");
+      linksArray.innerHTML = newUrl;
+      document.body.appendChild(linksArray);
+    }
+  });
 }
