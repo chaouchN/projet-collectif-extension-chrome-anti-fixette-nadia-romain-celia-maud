@@ -1,4 +1,4 @@
-const debug = document.getElementById("debug");
+// const { log } = require("console");
 
 const bazar = [
   "https://wikiroulette.co/",
@@ -18,27 +18,46 @@ const midi = [
   "https://www.sports.gouv.fr/les-bienfaits-du-sport-25",
 ];
 
-
 window.onload = (event) => {
-// Ajouter un écouteur d'événements sur un clic lorsque l'utilisateur entre son URL
-// À ce moment-là, nous ajoutons l'URL à "bazar" et le sauvegardons dans le stockage local
-document.getElementById('addUrlButton').addEventListener('click', async () => {
-  const newUrl = document.getElementById('urlInput').value.trim();
 
-  // Vérifier si l'URL n'est pas vide
-  if (newUrl !== '') {
-    // Ajouter l'URL à "bazar"
-    bazar.push(newUrl);
-    console.log("newUrl is pushed in bazar script.js")
+//envoyer au servic worker
+  chrome.runtime.sendMessage({ type: "append-log", text: "ping" }),
+  //recevoir du service worker
+  chrome.runtime.onMessage.addListener((message) => {
+    if (message.type === "append-log") {
+      console.log(message);
+    }
+  });
 
-    // Sauvegarder "bazar" dans le stockage local
-    await chrome.storage.local.set({ 'recupurl': bazar });
-  }
-});
+  // Ajouter un écouteur d'événements sur un clic lorsque l'utilisateur entre son URL
+  // À ce moment-là, nous ajoutons l'URL à "bazar" et le sauvegardons dans le stockage local
+  document
+    .getElementById("addUrlButton")
+    .addEventListener("click", async () => {
+      const newUrl = document.getElementById("urlInput").value.trim();
+      const newKey = document.getElementById("urlInput").value.trim();
+      // Vérifier si l'URL n'est pas vide
+      if (newUrl !== "") {
+        // Ajouter l'URL à "bazar"
+        bazar.push(newUrl);
+        console.log("newUrl is pushed in bazar script.js");
 
+        // ou si vous souhaitez envoyer uniquement la nouvelle URL ajoutée :
+        chrome.runtime.sendMessage({ type: "update-bazar", newUrl: newUrl });
+
+        const linksArray = document.createElement("p");
+        linksArray.innerHTML = newUrl;
+        document.body.appendChild(linksArray);
+      }
+    });
 };
 
-console.log(bazar)
+
+for (let i = 0; i < bazar.length; i++) {
+  const linksArray = document.createElement("p");
+  linksArray.innerHTML = bazar[i];
+  document.body.appendChild(linksArray);
+}
 
 const hourDay = new Date().getHours();
 const intervalID = setInterval(popUp, 500000, bazar.length);
@@ -51,7 +70,7 @@ function popUp(a) {
   } else {
     window.open(bazar[Math.floor(Math.random() * a)]);
   }
-} 
+}
 
 function ouvrirURL() {
   // Récupérer le nom de domaine actuel
@@ -61,21 +80,24 @@ function ouvrirURL() {
     "www.youtube.com": "https://thesecatsdonotexist.com/",
     "www.amazon.com": "https://www.leboncoin.fr/",
     "www.amazon.fr": "https://www.leboncoin.fr/",
-    "www.google.com":"https://wikiroulette.co/",
-    "www.facebook.com":"https://theuselessweb.com/",
-    "www.instagram.com":"https://www.kamoulox.lol/",
-    "twitter.com":"https://fr.wikihow.com/faire-une-pause-avec-les-r%C3%A9seaux-sociaux",
-    "wikipedia.org":"https://fr.wikihow.com/surmonter-la-cyberd%C3%A9pendance",
-    "yahoo.com":"https://lasonotheque.org/jeux/quiz-sonore",
-    "web.whatsapp.com":"http://make-everything-ok.com/",
-    "www.xvideos.com":"https://fr.wikihow.com/nettoyer-un-%C3%A9cran-d%E2%80%99ordinateur",
-    "tiktok.com":"https://pointerpointer.com/",
-    "www.pornhub.com":"https://fr.wikihow.com/nettoyer-un-%C3%A9cran-d%E2%80%99ordinateur",
+    "www.google.com": "https://wikiroulette.co/",
+    "www.facebook.com": "https://theuselessweb.com/",
+    "www.instagram.com": "https://www.kamoulox.lol/",
+    "twitter.com":
+      "https://fr.wikihow.com/faire-une-pause-avec-les-r%C3%A9seaux-sociaux",
+    "wikipedia.org": "https://fr.wikihow.com/surmonter-la-cyberd%C3%A9pendance",
+    "yahoo.com": "https://lasonotheque.org/jeux/quiz-sonore",
+    "web.whatsapp.com": "http://make-everything-ok.com/",
+    "www.xvideos.com":
+      "https://fr.wikihow.com/nettoyer-un-%C3%A9cran-d%E2%80%99ordinateur",
+    "tiktok.com": "https://pointerpointer.com/",
+    "www.pornhub.com":
+      "https://fr.wikihow.com/nettoyer-un-%C3%A9cran-d%E2%80%99ordinateur",
     // Ajoutez d'autres correspondances au besoin
   };
 
-   // Vérifier si le domaine actuel a une correspondance dans la liste
-   if (domaine in domainesUrls) {
+  // Vérifier si le domaine actuel a une correspondance dans la liste
+  if (domaine in domainesUrls) {
     // Ouvrir l'URL correspondante pour le domaine actuel
     window.location.href = domainesUrls[domaine];
   } else {
@@ -83,6 +105,7 @@ function ouvrirURL() {
     window.open(bazar[Math.floor(Math.random() * bazar.length)]);
   }
 }
+
 // Appeler la fonction pour l'exécuter
 //ouvrirURL();
 
