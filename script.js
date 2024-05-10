@@ -16,6 +16,7 @@ const midi = [
   "https://www.sports.gouv.fr/les-bienfaits-du-sport-25",
 ];
 
+
 const domainesUrls = {
   "www.youtube.com": "https://thesecatsdonotexist.com/",
   "www.amazon.com": "https://www.vinted.com/",
