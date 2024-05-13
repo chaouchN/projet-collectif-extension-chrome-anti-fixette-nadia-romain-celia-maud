@@ -1,6 +1,3 @@
-// Début du chargement de l'extension
-// On récupère les URL stockés dans le stockage local sous la clé "recupurl"
-// et on les ajoute un par un dans la variable "bazar"
 chrome.runtime.onInstalled.addListener(async () => {
   chrome.storage.local.get(null, (items) => {
     chrome.runtime.sendMessage({ type: "customBazar", content: items });
@@ -16,10 +13,10 @@ chrome.runtime.onInstalled.addListener(async () => {
       chrome.runtime.sendMessage({ type: "newBazarUpdate", newBazar: newBazarContent['newBazar'] });
         console.log("newBazarContent = ", newBazarContent)
         
+        //ajoute les urls custom au tableau de sites randoms dans le local storage
         if(!newBazarContent){newBazarContent = {};} 
         if(!newBazarContent['newBazar']){newBazarContent['newBazar'] = []}
         newBazarContent['newBazar'].push(customLink)
-        // newBazarContent['newBazar'] = [customLink];
         console.log(newBazarContent)
 
         chrome.storage.local.set(newBazarContent, () => {
@@ -33,18 +30,4 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
   
 })
-  
-// Récupérer les URL du stockage local
-  // const storedUrls = [];
-  // const recupUrl = bazar;
-
-  // Ajouter les URL récupérés un par un dans "bazar"
-//   for (const url of recupUrl) {
-//     bazar.push(url);
-//     console.log("url is pushed in bazar service-worker.js")
-//   }
-// });
-
-//recevoir du script.js
-
 
