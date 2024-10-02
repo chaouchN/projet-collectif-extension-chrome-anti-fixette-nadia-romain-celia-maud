@@ -10,6 +10,6 @@ Amélioration du bien-être : Favorise des pauses régulières, réduisant ainsi
 Langages : HTML, CSS, JavaScript
 Navigateur cible : Chrome / Firefox
 
-🛠️ Développement
+🛠️ Développement :
 Équipe : 4 personnes
 Durée : 7 jours
